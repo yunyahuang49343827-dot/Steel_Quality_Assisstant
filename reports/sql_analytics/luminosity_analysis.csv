@@ -1,0 +1,8 @@
+defect_type,sample_count,avg_min_luminosity,avg_max_luminosity,avg_luminosity_index
+Pastry,1465,84.37,124.39,-0.1817
+Z_Scratch,1150,91.79,124.32,-0.1616
+Bumps,4761,91.55,126.91,-0.1501
+K_Scatch,3411,48.58,132.31,-0.1363
+Other_Faults,6540,93.32,128.45,-0.1323
+Dirtiness,485,98.66,130.45,-0.1093
+Stains,568,112.36,138.07,-0.0231

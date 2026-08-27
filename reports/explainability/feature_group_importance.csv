@@ -1,0 +1,7 @@
+feature_group,total_importance,feature_count,mean_feature_importance,importance_share,rank
+Steel / Production,0.33467987,4,0.08366997,0.3346799,1
+Shape / Edge Index,0.25169224,8,0.03146153,0.25169227,2
+Log Transformation,0.18047209,3,0.060157362,0.1804721,3
+Geometry / Position,0.15826593,7,0.022609418,0.15826595,4
+Luminosity,0.061607085,4,0.015401771,0.061607093,5
+Area Transformation,0.013282737,1,0.013282737,0.013282739,6

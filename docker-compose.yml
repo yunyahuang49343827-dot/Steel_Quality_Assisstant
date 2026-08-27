@@ -1,0 +1,209 @@
+name: steel-quality-intelligence
+
+
+services:
+
+  # =======================================================
+  # PostgreSQL
+  # =======================================================
+
+  postgres:
+    image: postgres:17
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    # -----------------------------------------------------
+    # Internal Docker port only.
+    #
+    # Other containers access PostgreSQL through:
+    # postgres:5432
+    # -----------------------------------------------------
+
+    expose:
+      - "5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+
+      - ./data/train.csv:/seed-data/train.csv:ro
+
+      - ./data/processed/steel_quality_modeling.csv:/seed-data/steel_quality_modeling.csv:ro
+
+    networks:
+      - steel_network
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} || exit 1"
+        ]
+
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+    stop_grace_period: 20s
+
+    logging:
+      driver: json-file
+
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
+  # =======================================================
+  # FastAPI Backend
+  # =======================================================
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    environment:
+      APP_ENV: docker
+
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+
+    # -----------------------------------------------------
+    # Backend stays inside Docker network.
+    #
+    # Nginx accesses it through:
+    # backend:8000
+    # -----------------------------------------------------
+
+    expose:
+      - "8000"
+
+    networks:
+      - steel_network
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+    # -----------------------------------------------------
+    # Allows containers to reach Ollama running on host.
+    #
+    # Docker Desktop already supports this hostname.
+    # host-gateway also improves portability.
+    # -----------------------------------------------------
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    stop_grace_period: 20s
+
+    logging:
+      driver: json-file
+
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
+  # =======================================================
+  # React + Nginx Frontend
+  # =======================================================
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+      args:
+        VITE_API_BASE_URL: /api
+
+    restart: unless-stopped
+
+    # -----------------------------------------------------
+    # Single public application entry point.
+    # -----------------------------------------------------
+
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+
+    networks:
+      - steel_network
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://127.0.0.1/ || exit 1"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    stop_grace_period: 10s
+
+    logging:
+      driver: json-file
+
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
+# =========================================================
+# Docker Network
+# =========================================================
+
+networks:
+
+  steel_network:
+    driver: bridge
+
+
+# =========================================================
+# Persistent Volume
+# =========================================================
+
+volumes:
+
+  postgres_data:

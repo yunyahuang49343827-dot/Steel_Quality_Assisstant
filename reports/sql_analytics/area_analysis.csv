@@ -1,0 +1,8 @@
+defect_type,sample_count,avg_pixels_area,min_pixels_area,max_pixels_area,avg_log_area
+K_Scatch,3411,7271.08,16.00,152655.00,3.6886
+Other_Faults,6540,637.10,6.00,37334.00,2.2624
+Z_Scratch,1150,477.93,17.00,15704.00,2.3224
+Dirtiness,485,442.55,18.00,6615.00,2.3924
+Pastry,1465,364.96,12.00,17810.00,2.2909
+Bumps,4761,227.71,8.00,21054.00,2.1456
+Stains,568,28.05,6.00,212.00,1.3362

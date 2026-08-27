@@ -1,0 +1,2 @@
+champion_model,selection_metric,validation_accuracy,validation_macro_recall,validation_macro_f1,test_accuracy,test_macro_recall,test_macro_f1
+xgboost_tuned,validation_macro_f1,0.5719985491476243,0.6307287153357924,0.5709154266792867,0.5850562205295611,0.6471148583468314,0.5904233448129739

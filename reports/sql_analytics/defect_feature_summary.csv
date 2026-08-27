@@ -1,0 +1,8 @@
+defect_type,sample_count,avg_plate_thickness,avg_pixels_area,avg_x_perimeter,avg_y_perimeter,avg_luminosity_index
+Other_Faults,6540,91.56,637.10,47.97,38.63,-0.1323
+Bumps,4761,77.02,227.71,28.00,24.10,-0.1501
+K_Scatch,3411,41.16,7271.08,351.68,199.78,-0.1363
+Pastry,1465,91.26,364.96,30.95,41.22,-0.1817
+Z_Scratch,1150,73.95,477.93,46.01,39.25,-0.1616
+Stains,568,51.57,28.05,9.44,6.10,-0.0231
+Dirtiness,485,80.16,442.55,40.19,51.98,-0.1093

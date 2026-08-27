@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+11673,Pastry,Pastry,0.9398627877235413,Orientation_Index,0.8487,0.45689976,0.45689976,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Length_of_Conveyer,1687.0,0.4152415,0.4152415,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Log_Y_Index,2.5752,0.35413668,0.35413668,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Minimum_of_Luminosity,42.0,0.18110837,0.18110837,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Maximum_of_Luminosity,143.0,0.18055075,0.18055075,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,X_Minimum,1572.0,0.16874035,0.16874035,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,LogOfAreas,3.6774,0.16517253,0.16517253,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Outside_Global_Index,1.0,0.1399707,0.1399707,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,X_Maximum,1610.0,0.13850018,0.13850018,supports_prediction
+11673,Pastry,Pastry,0.9398627877235413,Y_Perimeter,377.0,0.1266617,0.1266617,supports_prediction

@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+4231,Dirtiness,Dirtiness,0.962594211101532,Orientation_Index,0.9264,0.7090285,0.7090285,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Steel_Plate_Thickness,100.0,0.5502285,0.5502285,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Square_Index,0.0736,0.5191448,0.5191448,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Edges_X_Index,0.1525,0.25855464,0.25855464,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Edges_Index,0.8909,0.24303104,0.24303104,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Minimum_of_Luminosity,111.0,0.22810413,0.22810413,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Log_X_Index,1.5051,-0.1817211,0.1817211,opposes_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,X_Maximum,659.0,0.13344261,0.13344261,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Luminosity_Index,-0.0822,0.121541165,0.121541165,supports_prediction
+4231,Dirtiness,Dirtiness,0.962594211101532,Length_of_Conveyer,1364.0,0.11899949,0.11899949,supports_prediction

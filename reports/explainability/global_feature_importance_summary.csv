@@ -1,0 +1,7 @@
+metric,value
+top_feature,TypeOfSteel_A400
+top_feature_importance,0.13041833
+top_feature_group,Steel / Production
+top_group_importance_share,0.3346799
+features_for_50_percent_importance,6
+features_for_80_percent_importance,14

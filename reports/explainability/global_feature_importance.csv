@@ -1,0 +1,28 @@
+feature,feature_group,importance,rank,importance_share,cumulative_importance_share
+TypeOfSteel_A400,Steel / Production,0.13041833,1,0.13041835,0.13041835
+Log_X_Index,Log Transformation,0.09878627,2,0.09878628,0.22920462
+TypeOfSteel_A300,Steel / Production,0.09685322,3,0.09685323,0.32605785
+Outside_Global_Index,Shape / Edge Index,0.09533518,4,0.095335186,0.42139304
+Steel_Plate_Thickness,Steel / Production,0.062303577,5,0.06230358,0.4836966
+LogOfAreas,Log Transformation,0.057327595,6,0.0573276,0.5410242
+Pixels_Areas,Geometry / Position,0.04687148,7,0.046871483,0.5878957
+Length_of_Conveyer,Steel / Production,0.045104757,8,0.04510476,0.63300043
+Y_Perimeter,Geometry / Position,0.044750307,9,0.04475031,0.67775077
+Outside_X_Index,Shape / Edge Index,0.04022122,10,0.040221225,0.717972
+Orientation_Index,Shape / Edge Index,0.03628942,11,0.036289424,0.7542614
+Log_Y_Index,Log Transformation,0.024358228,12,0.02435823,0.7786196
+Square_Index,Shape / Edge Index,0.021119911,13,0.021119913,0.7997395
+Edges_Y_Index,Shape / Edge Index,0.021106455,14,0.021106457,0.82084596
+X_Maximum,Geometry / Position,0.019483792,15,0.019483794,0.84032977
+Minimum_of_Luminosity,Luminosity,0.018085636,16,0.018085638,0.8584154
+Sum_of_Luminosity,Luminosity,0.017747717,17,0.017747719,0.8761631
+Luminosity_Index,Luminosity,0.014400484,18,0.014400485,0.8905636
+X_Minimum,Geometry / Position,0.01433025,19,0.014330251,0.9048939
+Edges_Index,Shape / Edge Index,0.014041715,20,0.014041716,0.9189356
+SigmoidOfAreas,Area Transformation,0.013282737,21,0.013282738,0.9322183
+X_Perimeter,Geometry / Position,0.012781002,22,0.012781003,0.94499934
+Empty_Index,Shape / Edge Index,0.012445071,23,0.012445072,0.9574444
+Maximum_of_Luminosity,Luminosity,0.011373246,24,0.011373247,0.96881765
+Edges_X_Index,Shape / Edge Index,0.011133251,25,0.011133252,0.9799509
+Y_Maximum,Geometry / Position,0.010239666,26,0.010239667,0.99019057
+Y_Minimum,Geometry / Position,0.009809432,27,0.009809433,1.0

@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Length_of_Conveyer,1354.0,1.2428049,1.2428049,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Steel_Plate_Thickness,70.0,0.94155145,0.94155145,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,X_Maximum,95.0,0.42355686,0.42355686,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,TypeOfSteel_A300,1.0,0.3018563,0.3018563,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Luminosity_Index,-0.2769,0.28634995,0.28634995,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Edges_X_Index,0.9444,-0.22198713,0.22198713,opposes_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Edges_Y_Index,0.7059,0.19706054,0.19706054,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Sum_of_Luminosity,12909.0,0.16940491,0.16940491,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,TypeOfSteel_A400,0.0,0.16723973,0.16723973,supports_prediction
+442,Z_Scratch,Z_Scratch,0.9653302431106567,Maximum_of_Luminosity,118.0,0.15672071,0.15672071,supports_prediction

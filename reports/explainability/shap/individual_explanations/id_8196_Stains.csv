@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+8196,Stains,Stains,0.9927456974983215,Pixels_Areas,8.0,0.9898539,0.9898539,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Steel_Plate_Thickness,50.0,0.77701116,0.77701116,supports_prediction
+8196,Stains,Stains,0.9927456974983215,LogOfAreas,0.9031,0.74460584,0.74460584,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Y_Perimeter,4.0,0.71034443,0.71034443,supports_prediction
+8196,Stains,Stains,0.9927456974983215,SigmoidOfAreas,0.1292,0.6199874,0.6199874,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Log_Y_Index,0.6021,0.44242826,0.44242826,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Sum_of_Luminosity,958.0,0.40629867,0.40629867,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Y_Minimum,1593115.0,0.1641622,0.1641622,supports_prediction
+8196,Stains,Stains,0.9927456974983215,Luminosity_Index,-0.0367,-0.1541058,0.1541058,opposes_prediction
+8196,Stains,Stains,0.9927456974983215,Edges_X_Index,1.0,0.13504222,0.13504222,supports_prediction

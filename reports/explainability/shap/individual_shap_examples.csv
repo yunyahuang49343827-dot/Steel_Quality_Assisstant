@@ -1,0 +1,8 @@
+id,actual_defect,predicted_defect,confidence,top_supporting_features,top_opposing_features
+11226,Bumps,Bumps,0.9005196690559387,"Length_of_Conveyer, TypeOfSteel_A300, Square_Index",
+4231,Dirtiness,Dirtiness,0.962594211101532,"Orientation_Index, Steel_Plate_Thickness, Square_Index",Log_X_Index
+5158,K_Scatch,K_Scatch,0.9946909546852112,"Log_X_Index, Outside_X_Index, Steel_Plate_Thickness",
+10080,Other_Faults,Other_Faults,0.9358449578285217,"Steel_Plate_Thickness, Length_of_Conveyer, Orientation_Index",
+11673,Pastry,Pastry,0.9398627877235413,"Orientation_Index, Length_of_Conveyer, Log_Y_Index",
+8196,Stains,Stains,0.9927456974983215,"Pixels_Areas, Steel_Plate_Thickness, LogOfAreas",Luminosity_Index
+442,Z_Scratch,Z_Scratch,0.9653302431106567,"Length_of_Conveyer, Steel_Plate_Thickness, X_Maximum",Edges_X_Index

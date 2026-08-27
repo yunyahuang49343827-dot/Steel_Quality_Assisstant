@@ -1,0 +1,27 @@
+target-version = "py312"
+
+line-length = 88
+
+exclude = [
+    ".git",
+    ".venv",
+    ".venv312",
+    ".pytest_cache",
+    "__pycache__",
+    "frontend",
+]
+
+
+[lint]
+
+select = [
+    "E",
+    "F",
+]
+
+ignore = []
+
+
+[lint.per-file-ignores]
+
+"src/b*.py" = []

@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+11226,Bumps,Bumps,0.9005196690559387,Length_of_Conveyer,1690.0,0.35936862,0.35936862,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,TypeOfSteel_A300,1.0,0.28638607,0.28638607,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Square_Index,1.0,0.2372753,0.2372753,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Steel_Plate_Thickness,60.0,0.21066138,0.21066138,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Edges_Index,0.8357,0.16752298,0.16752298,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,TypeOfSteel_A400,0.0,0.1513865,0.1513865,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Orientation_Index,0.0,0.13899094,0.13899094,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Log_Y_Index,1.0,0.12865901,0.12865901,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Y_Maximum,3023381.0,0.12497129,0.12497129,supports_prediction
+11226,Bumps,Bumps,0.9005196690559387,Minimum_of_Luminosity,95.0,0.09656585,0.09656585,supports_prediction

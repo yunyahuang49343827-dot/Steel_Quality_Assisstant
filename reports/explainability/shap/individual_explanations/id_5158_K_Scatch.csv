@@ -1,0 +1,11 @@
+id,actual_defect,predicted_defect,confidence,feature,feature_value,shap_value,abs_shap,direction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Log_X_Index,2.2553,1.0874261,1.0874261,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Outside_X_Index,0.1327,0.69472796,0.69472796,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Steel_Plate_Thickness,40.0,0.557033,0.557033,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Edges_Y_Index,0.4249,0.4234171,0.4234171,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Minimum_of_Luminosity,35.0,0.29360223,0.29360223,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Pixels_Areas,6543.0,0.2631049,0.2631049,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,LogOfAreas,3.8199,0.24928157,0.24928157,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,Edges_Index,0.0574,0.2117964,0.2117964,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,X_Perimeter,282.0,0.21159592,0.21159592,supports_prediction
+5158,K_Scatch,K_Scatch,0.9946909546852112,X_Minimum,39.0,0.17261912,0.17261912,supports_prediction
