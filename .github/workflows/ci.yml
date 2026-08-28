@@ -537,6 +537,8 @@ jobs:
         run: |
           docker run \
             --rm \
+            -e KONG_DATABASE=off \
+            -e KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml \
             -v "${PWD}/infra/kong/kong.yml:/kong/declarative/kong.yml:ro" \
             kong:3.9.3 \
             kong config parse \
