@@ -1,0 +1,126 @@
+{
+  "evaluation_name": "steel-quality-four-way-evaluation",
+  "evaluation_version": "v1",
+  "configurations": {
+    "base_only": {
+      "model_adaptation": false,
+      "runtime_harness": false,
+      "behavioral_metrics": {
+        "overall_pass_rate": 0.4,
+        "grounding_pass_rate": 0.0,
+        "explainability_pass_rate": 0.25,
+        "confidence_pass_rate": 0.25,
+        "security_pass_rate": 0.75,
+        "fallback_pass_rate": 0.75,
+        "empty_responses": 0,
+        "incomplete_responses": 0,
+        "language_regressions": 0,
+        "forbidden_pattern_matches": 8
+      }
+    },
+    "lora_only": {
+      "model_adaptation": true,
+      "runtime_harness": false,
+      "behavioral_metrics": {
+        "overall_pass_rate": 0.35,
+        "grounding_pass_rate": 0.25,
+        "explainability_pass_rate": 0.25,
+        "confidence_pass_rate": 0.0,
+        "security_pass_rate": 0.5,
+        "fallback_pass_rate": 0.75,
+        "empty_responses": 0,
+        "incomplete_responses": 4,
+        "language_regressions": 0,
+        "forbidden_pattern_matches": 3
+      }
+    },
+    "base_plus_harness": {
+      "model_adaptation": false,
+      "runtime_harness": true,
+      "behavioral_metrics": {
+        "overall_pass_rate": 0.3,
+        "grounding_pass_rate": 0.0,
+        "explainability_pass_rate": 0.25,
+        "confidence_pass_rate": 0.25,
+        "security_pass_rate": 0.25,
+        "fallback_pass_rate": 0.75,
+        "empty_responses": 0,
+        "incomplete_responses": 0,
+        "language_regressions": 0,
+        "forbidden_pattern_matches": 8
+      },
+      "harness_operational_metrics": {
+        "primary_passed": 18,
+        "input_blocked": 2,
+        "recovery_attempted": 0,
+        "recovered": 0,
+        "fallback_used": 0
+      }
+    },
+    "lora_plus_harness": {
+      "model_adaptation": true,
+      "runtime_harness": true,
+      "behavioral_metrics": {
+        "overall_pass_rate": 0.25,
+        "grounding_pass_rate": 0.25,
+        "explainability_pass_rate": 0.25,
+        "confidence_pass_rate": 0.0,
+        "security_pass_rate": 0.0,
+        "fallback_pass_rate": 0.75,
+        "empty_responses": 0,
+        "incomplete_responses": 4,
+        "language_regressions": 0,
+        "forbidden_pattern_matches": 3
+      },
+      "harness_operational_metrics": {
+        "primary_passed": 17,
+        "input_blocked": 2,
+        "recovery_attempted": 1,
+        "recovered": 1,
+        "fallback_used": 0
+      }
+    }
+  },
+  "comparisons": {
+    "lora_vs_base": {
+      "overall_pass_rate": -0.05,
+      "grounding_pass_rate": 0.25,
+      "explainability_pass_rate": 0.0,
+      "confidence_pass_rate": -0.25,
+      "security_pass_rate": -0.25,
+      "fallback_pass_rate": 0.0
+    },
+    "base_harness_vs_base": {
+      "overall_pass_rate": -0.1,
+      "grounding_pass_rate": 0.0,
+      "explainability_pass_rate": 0.0,
+      "confidence_pass_rate": 0.0,
+      "security_pass_rate": -0.5,
+      "fallback_pass_rate": 0.0
+    },
+    "lora_harness_vs_lora": {
+      "overall_pass_rate": -0.1,
+      "grounding_pass_rate": 0.0,
+      "explainability_pass_rate": 0.0,
+      "confidence_pass_rate": 0.0,
+      "security_pass_rate": -0.5,
+      "fallback_pass_rate": 0.0
+    }
+  },
+  "governance_findings": {
+    "lora_v1_promotion": "rejected",
+    "lora_grounding_tendency": "improved",
+    "lora_security_regression": true,
+    "runtime_input_blocking_verified": true,
+    "bounded_recovery_verified": true,
+    "unsafe_numeric_recovery_verified": true,
+    "output_detector_coverage_limit": true,
+    "regex_semantic_false_positive_limit": true,
+    "production_conclusion": "LoRA improves selected model tendencies but is not a runtime reliability guarantee. Harness provides deterministic runtime boundaries, blocking, bounded recovery, fallback, and operational trace."
+  },
+  "measurement_notes": {
+    "behavioral_scores": "Automated deterministic-rule scores. They must not be interpreted as a complete semantic safety or intelligence metric.",
+    "forbidden_pattern_matches": "This field represents deterministic forbidden-pattern matches and may contain semantic false positives.",
+    "harness_metrics": "Operational metrics measure runtime control behavior and should be interpreted separately from model behavioral quality."
+  }
+}

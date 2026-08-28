@@ -1,0 +1,102 @@
+_format_version: "3.0"
+
+_transform: true
+
+
+# =========================================================
+# 1. Upstream
+# =========================================================
+
+upstreams:
+
+  - name: steel-quality-upstream
+
+    algorithm: round-robin
+
+
+    targets:
+
+      # ---------------------------------------------------
+      # Stable deployment
+      #
+      # Relative weight:
+      # 90 / (90 + 10) = 90%
+      # ---------------------------------------------------
+
+      - target: backend:8000
+
+        weight: 90
+
+
+      # ---------------------------------------------------
+      # Canary deployment
+      #
+      # Relative weight:
+      # 10 / (90 + 10) = 10%
+      # ---------------------------------------------------
+
+      - target: backend-canary:8000
+
+        weight: 10
+
+
+# =========================================================
+# 2. Steel Quality API Service
+# =========================================================
+
+services:
+
+  - name: steel-quality-backend
+
+    host: steel-quality-upstream
+
+    port: 80
+
+    protocol: http
+
+
+    connect_timeout: 60000
+
+    write_timeout: 180000
+
+    read_timeout: 180000
+
+    retries: 2
+
+
+    routes:
+
+      - name: steel-quality-api
+
+        paths:
+
+          - /api
+
+        strip_path: true
+
+        preserve_host: false
+
+        protocols:
+
+          - http
+
+          - https
+
+
+        # =================================================
+        # Gateway protection
+        # =================================================
+
+        plugins:
+
+          - name: rate-limiting
+
+            config:
+
+              minute: 500
+
+              policy: local
+
+              fault_tolerant: true
+
+              hide_client_headers: false

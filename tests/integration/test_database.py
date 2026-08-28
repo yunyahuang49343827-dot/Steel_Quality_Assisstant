@@ -4,7 +4,12 @@ import psycopg
 import pytest
 
 
-pytestmark = pytest.mark.integration
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.usefixtures(
+        "integration_database"
+    ),
+]
 
 
 def get_test_connection():

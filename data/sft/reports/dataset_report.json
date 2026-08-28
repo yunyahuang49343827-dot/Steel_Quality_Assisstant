@@ -1,0 +1,32 @@
+{
+  "dataset_version": "b23.1",
+  "random_seed": 42,
+  "validation_ratio": 0.2,
+  "total_samples": 120,
+  "train_samples": 95,
+  "validation_samples": 25,
+  "category_counts": {
+    "confidence": 24,
+    "explainability": 24,
+    "fallback": 24,
+    "grounding": 24,
+    "security": 24
+  },
+  "train_category_counts": {
+    "confidence": 19,
+    "explainability": 19,
+    "fallback": 19,
+    "grounding": 19,
+    "security": 19
+  },
+  "validation_category_counts": {
+    "confidence": 5,
+    "explainability": 5,
+    "fallback": 5,
+    "grounding": 5,
+    "security": 5
+  },
+  "duplicate_samples": 0,
+  "train_validation_exact_overlap": 0,
+  "design_principle": "Behavior is fine-tuned; dynamic factual data remains tool-grounded."
+}

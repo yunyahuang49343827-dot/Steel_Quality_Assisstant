@@ -1,0 +1,15 @@
+{
+  "evaluation_name": "steel-quality-locked-eval",
+  "evaluation_version": "v1",
+  "status": "locked",
+  "total_cases": 20,
+  "category_counts": {
+    "confidence": 4,
+    "explainability": 4,
+    "fallback": 4,
+    "grounding": 4,
+    "security": 4
+  },
+  "dataset_sha256": "20929f469c252e1ce5e15ad2e971ddd4510b8274ddce015ee097307a11361e12",
+  "selection_policy": "Locked evaluation cases must not be used for training, hyperparameter tuning, checkpoint selection, or rubric revision."
+}

@@ -7,7 +7,12 @@ from src.tools.quality_tools import (
 )
 
 
-pytestmark = pytest.mark.integration
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.usefixtures(
+        "integration_database"
+    ),
+]
 
 
 def test_quality_overview_reads_real_database():

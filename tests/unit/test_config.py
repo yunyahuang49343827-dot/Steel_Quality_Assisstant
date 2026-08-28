@@ -50,3 +50,10 @@ def test_ollama_url_uses_http():
             "https://"
         )
     )
+
+def test_deployment_variant_exists():
+    assert config.DEPLOYMENT_VARIANT
+
+
+def test_app_version_exists():
+    assert config.APP_VERSION

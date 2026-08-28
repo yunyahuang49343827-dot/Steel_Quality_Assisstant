@@ -1,0 +1,254 @@
+services:
+
+  # =======================================================
+  # Stable FastAPI Backend Override
+  # =======================================================
+
+  backend:
+
+    environment:
+
+      APP_ENV: docker
+
+      DEPLOYMENT_VARIANT: stable
+
+      APP_VERSION: v1
+
+      API_HOST: 0.0.0.0
+
+      API_PORT: 8000
+
+      DB_HOST: postgres
+
+      DB_PORT: 5432
+
+      DB_NAME: ${POSTGRES_DB}
+
+      DB_USER: ${POSTGRES_USER}
+
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+
+
+  # =======================================================
+  # Canary FastAPI Backend
+  # =======================================================
+
+  backend-canary:
+
+    build:
+
+      context: .
+
+      dockerfile: Dockerfile
+
+
+    restart: unless-stopped
+
+
+    environment:
+
+      APP_ENV: docker
+
+      DEPLOYMENT_VARIANT: canary
+
+      APP_VERSION: v2
+
+      API_HOST: 0.0.0.0
+
+      API_PORT: 8000
+
+      DB_HOST: postgres
+
+      DB_PORT: 5432
+
+      DB_NAME: ${POSTGRES_DB}
+
+      DB_USER: ${POSTGRES_USER}
+
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+
+
+    # -----------------------------------------------------
+    # Canary remains private.
+    #
+    # Kong will reach it through:
+    #
+    # backend-canary:8000
+    #
+    # No host port is published.
+    # -----------------------------------------------------
+
+    expose:
+
+      - "8000"
+
+
+    networks:
+
+      - steel_network
+
+
+    depends_on:
+
+      postgres:
+
+        condition: service_healthy
+
+
+    healthcheck:
+
+      test:
+
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"
+        ]
+
+      interval: 10s
+
+      timeout: 5s
+
+      retries: 5
+
+      start_period: 15s
+
+
+    extra_hosts:
+
+      - "host.docker.internal:host-gateway"
+
+
+    stop_grace_period: 20s
+
+
+    logging:
+
+      driver: json-file
+
+      options:
+
+        max-size: "10m"
+
+        max-file: "3"
+
+
+  # =======================================================
+  # Kong API Gateway
+  # =======================================================
+
+  kong:
+
+    image: kong:3.9.3
+
+    restart: unless-stopped
+
+
+    environment:
+
+      KONG_DATABASE: "off"
+
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+
+
+    volumes:
+
+      - ./infra/kong/kong.yml:/kong/declarative/kong.yml:ro
+
+
+    expose:
+
+      - "8000"
+
+      - "8001"
+
+
+    ports:
+
+      - "${KONG_PROXY_PORT:-8008}:8000"
+
+
+    networks:
+
+      - steel_network
+
+
+    depends_on:
+
+      backend:
+
+        condition: service_healthy
+
+      backend-canary:
+
+        condition: service_healthy
+
+
+    healthcheck:
+
+      test:
+
+        [
+          "CMD",
+          "kong",
+          "health"
+        ]
+
+      interval: 10s
+
+      timeout: 5s
+
+      retries: 5
+
+      start_period: 15s
+
+
+    stop_grace_period: 10s
+
+
+    logging:
+
+      driver: json-file
+
+      options:
+
+        max-size: "10m"
+
+        max-file: "3"
+
+
+  # =======================================================
+  # Frontend Gateway Override
+  # =======================================================
+
+  frontend:
+
+    volumes:
+
+      - ./infra/nginx/nginx.gateway.conf:/etc/nginx/conf.d/default.conf:ro
+
+
+    depends_on:
+
+      kong:
+
+        condition: service_healthy

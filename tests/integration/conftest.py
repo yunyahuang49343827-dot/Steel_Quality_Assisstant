@@ -92,7 +92,6 @@ def wait_for_postgres(
 
 @pytest.fixture(
     scope="session",
-    autouse=True,
 )
 def integration_database():
     """

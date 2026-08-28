@@ -30,6 +30,7 @@ dist-ssr/
 
 .venv/
 .venv312/
+.venv-mlx/
 
 __pycache__/
 *.py[cod]
@@ -92,3 +93,10 @@ models/random_forest_baseline.joblib
 # =========================================================
 
 .ruff_cache/
+
+# =========================================================
+# LoRA adapter weights
+# Keep configs / reports, exclude binary checkpoints
+# =========================================================
+
+adapters/**/*.safetensors

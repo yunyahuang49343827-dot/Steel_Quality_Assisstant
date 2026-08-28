@@ -1,0 +1,113 @@
+{
+  "report_name": "steel-quality-lora-model-governance",
+  "report_version": "v1",
+  "experiment_status": "completed",
+  "base_model": {
+    "name": "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+    "runtime": "MLX-LM",
+    "hardware": "Apple Silicon",
+    "quantization": "4-bit"
+  },
+  "training_dataset": {
+    "dataset_version": "sft_v1",
+    "total_samples": 120,
+    "train_samples": 95,
+    "validation_samples": 25,
+    "dataset_sha256": null,
+    "status": "frozen"
+  },
+  "training_configuration": {
+    "fine_tune_type": "LoRA",
+    "training_mode": "QLoRA-style 4-bit adapter training",
+    "mask_prompt": true,
+    "num_lora_layers": 8,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "learning_rate": 1e-05,
+    "training_iterations": 200,
+    "gradient_checkpointing": true,
+    "seed": 42,
+    "trainable_parameters": 3670000,
+    "trainable_parameter_ratio": 0.00091
+  },
+  "training_validation_history": {
+    "iteration_1": 6.85,
+    "iteration_25": 4.618,
+    "iteration_50": 3.586,
+    "iteration_75": 3.298,
+    "iteration_100": 3.066,
+    "iteration_125": 2.89,
+    "iteration_150": 2.774,
+    "iteration_175": 2.673,
+    "iteration_200": 2.623
+  },
+  "checkpoint_selection": {
+    "selected_checkpoint": "step_150",
+    "selection_method": "behavioral checkpoint comparison",
+    "lowest_validation_loss_checkpoint": "step_200",
+    "selection_rationale": "Step 200 achieved the lowest validation loss but showed grounding regression. Step 150 demonstrated stronger evidence-grounding behavior.",
+    "selected_adapter_sha256": "191cfb8d14d41a4e2a47d5137c5851dab871056c552a78bd4ab5e8a65e24bc2d"
+  },
+  "locked_evaluation": {
+    "evaluation_version": "locked_eval_v1",
+    "total_cases": 20,
+    "dataset_sha256": "20929f469c252e1ce5e15ad2e971ddd4510b8274ddce015ee097307a11361e12",
+    "base": {
+      "overall_pass_rate": 0.4,
+      "grounding_pass_rate": 0.0,
+      "security_pass_rate": 0.75
+    },
+    "lora": {
+      "overall_pass_rate": 0.35,
+      "grounding_pass_rate": 0.25,
+      "security_pass_rate": 0.5,
+      "empty_responses": 0,
+      "incomplete_responses": 4
+    }
+  },
+  "promotion_gate": {
+    "decision": "REJECT",
+    "reasons": [
+      "Overall behavioral performance regressed.",
+      "Security performance regressed.",
+      "Candidate produced unsafe responses."
+    ],
+    "deltas": {
+      "overall": -0.05,
+      "grounding": 0.25,
+      "security": -0.25
+    }
+  },
+  "runtime_harness_evidence": {
+    "input_blocking_verified": true,
+    "bounded_recovery_verified": true,
+    "numeric_hallucination_recovery_verified": true,
+    "base_harness": {
+      "primary_passed": 18,
+      "input_blocked": 2,
+      "recovery_attempted": 0,
+      "recovered": 0,
+      "fallback_used": 0
+    },
+    "lora_harness": {
+      "primary_passed": 17,
+      "input_blocked": 2,
+      "recovery_attempted": 1,
+      "recovered": 1,
+      "fallback_used": 0
+    }
+  },
+  "known_limitations": [
+    "Deterministic regex scoring can produce semantic false positives.",
+    "Runtime output detector coverage does not capture every unsupported model statement.",
+    "Behavioral automated scores must not be interpreted as complete semantic safety metrics.",
+    "The LoRA dataset is intentionally small and optimized for behavioral adaptation rather than broad domain knowledge acquisition.",
+    "The experimental MLX LoRA model is separate from the production Ollama model-serving path."
+  ],
+  "final_governance_conclusion": {
+    "lora_v1": "rejected",
+    "production_promotion": false,
+    "reason": "LoRA v1 improved selected grounding tendencies but failed the locked promotion gate because overall behavioral performance and security performance regressed.",
+    "engineering_conclusion": "Fine-tuning changes model behavioral tendencies but does not replace deterministic runtime governance. Harness controls such as policy gates, bounded recovery, fallback, permissions, validation, and trace remain necessary."
+  }
+}

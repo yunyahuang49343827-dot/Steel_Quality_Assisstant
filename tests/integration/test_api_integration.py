@@ -7,8 +7,19 @@ from fastapi.testclient import (
 from src.api.main import app
 
 
-pytestmark = pytest.mark.integration
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.usefixtures(
+        "integration_database"
+    ),
+]
 
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.usefixtures(
+        "integration_database"
+    ),
+]
 
 client = TestClient(
     app

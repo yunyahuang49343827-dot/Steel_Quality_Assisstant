@@ -1,0 +1,49 @@
+{
+  "dataset_version": "v1",
+  "quality_gate_passed": true,
+  "total_samples": 120,
+  "train_samples": 95,
+  "validation_samples": 25,
+  "category_distribution": {
+    "confidence": 24,
+    "explainability": 24,
+    "fallback": 24,
+    "grounding": 24,
+    "security": 24
+  },
+  "train_category_distribution": {
+    "confidence": 19,
+    "explainability": 19,
+    "fallback": 19,
+    "grounding": 19,
+    "security": 19
+  },
+  "validation_category_distribution": {
+    "confidence": 5,
+    "explainability": 5,
+    "fallback": 5,
+    "grounding": 5,
+    "security": 5
+  },
+  "exact_duplicate_count": 0,
+  "exact_duplicates": [],
+  "near_duplicate_threshold": 0.92,
+  "near_duplicate_count": 0,
+  "near_duplicates": [],
+  "train_validation_leakage_threshold": 0.9,
+  "train_validation_near_leakage_count": 0,
+  "train_validation_near_leakage": [],
+  "unsafe_target_count": 0,
+  "unsafe_target_findings": [],
+  "answer_length_statistics": {
+    "min_chars": 24,
+    "max_chars": 109,
+    "mean_chars": 54.33,
+    "median_chars": 53.0
+  },
+  "fingerprints": {
+    "train": "2da202a550425ec93fe04ed933b3cce0be84f206251f852f9cf6ac52b4942fa8",
+    "validation": "764b22a48247a8b12509842c6d54246334ac0eaa90021bbb714e4ac5ccfef4d9",
+    "full_dataset": "244addb71d03e26f445293045442fb6d2ad7834a93f56f2484daf9d051322a01"
+  }
+}

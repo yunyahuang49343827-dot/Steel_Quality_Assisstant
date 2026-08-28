@@ -27,7 +27,9 @@ from src.api.dashboard_service import (
 
 from src.config import (
     APP_ENV,
+    APP_VERSION,
     CORS_ORIGINS,
+    DEPLOYMENT_VARIANT,
 )
 
 from src.copilot.agent import (
@@ -186,6 +188,36 @@ def health_check():
 
         "database":
             database_status,
+    }
+
+
+# =========================================================
+# 5. Deployment metadata
+# =========================================================
+
+@app.get(
+    "/deployment",
+    tags=[
+        "System"
+    ],
+)
+def deployment_metadata():
+    """
+    Return immutable deployment metadata.
+
+    This endpoint is used to verify Stable / Canary
+    routing without changing business behavior.
+    """
+
+    return {
+        "variant":
+            DEPLOYMENT_VARIANT,
+
+        "version":
+            APP_VERSION,
+
+        "environment":
+            APP_ENV,
     }
 
 

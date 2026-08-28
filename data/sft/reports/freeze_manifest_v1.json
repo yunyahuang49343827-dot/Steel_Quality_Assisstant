@@ -1,0 +1,13 @@
+{
+  "dataset_name": "steel-quality-copilot-sft",
+  "dataset_version": "v1",
+  "status": "frozen",
+  "total_samples": 120,
+  "train_samples": 95,
+  "validation_samples": 25,
+  "full_dataset_sha256": "244addb71d03e26f445293045442fb6d2ad7834a93f56f2484daf9d051322a01",
+  "train_sha256": "2da202a550425ec93fe04ed933b3cce0be84f206251f852f9cf6ac52b4942fa8",
+  "validation_sha256": "764b22a48247a8b12509842c6d54246334ac0eaa90021bbb714e4ac5ccfef4d9",
+  "quality_gate_passed": true,
+  "design_principle": "Fine-tune behavioral policy; dynamic factual data remains tool-grounded."
+}

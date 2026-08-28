@@ -32,10 +32,25 @@ APP_ENV = os.getenv(
     "development",
 )
 
+
+DEPLOYMENT_VARIANT = os.getenv(
+    "DEPLOYMENT_VARIANT",
+    "local",
+)
+
+
+APP_VERSION = os.getenv(
+    "APP_VERSION",
+    "dev",
+)
+
+
 API_HOST = os.getenv(
     "API_HOST",
     "0.0.0.0",
 )
+
+
 
 API_PORT = int(
     os.getenv(
