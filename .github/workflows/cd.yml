@@ -1,0 +1,245 @@
+name: Continuous Delivery
+
+
+on:
+
+  workflow_run:
+
+    workflows:
+      - CI
+
+    types:
+      - completed
+
+    branches:
+      - main
+
+
+# =========================================================
+# Security
+#
+# This workflow only reads repository contents.
+# It does not deploy to a persistent production environment.
+# =========================================================
+
+permissions:
+  contents: read
+
+
+# =========================================================
+# Concurrency
+#
+# Only one staging delivery for the same source branch
+# should run at a time.
+# =========================================================
+
+concurrency:
+
+  group: cd-${{ github.event.workflow_run.head_branch }}
+
+  cancel-in-progress: true
+
+
+jobs:
+
+  # =======================================================
+  # Staging Delivery Validation
+  #
+  # This job runs only when:
+  #
+  # 1. The CI workflow completed successfully.
+  # 2. The CI workflow ran against main.
+  #
+  # The environment created here is temporary and exists
+  # only on the GitHub-hosted runner.
+  #
+  # This is NOT a persistent production deployment.
+  # =======================================================
+
+  staging-delivery:
+
+    name: Staging Delivery Validation
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    if: >-
+      ${{
+        github.event.workflow_run.conclusion == 'success'
+        &&
+        github.event.workflow_run.head_branch == 'main'
+      }}
+
+
+    env:
+
+      # ---------------------------------------------------
+      # Staging-only PostgreSQL credentials
+      # ---------------------------------------------------
+
+      POSTGRES_DB: steel_quality_staging
+
+      POSTGRES_USER: staging_user
+
+      POSTGRES_PASSWORD: staging_password
+
+
+      # ---------------------------------------------------
+      # Application runtime
+      # ---------------------------------------------------
+
+      APP_ENV: staging
+
+      OLLAMA_MODEL: qwen3.5:9b
+
+      CORS_ORIGINS: >-
+        http://localhost:15173,
+        http://127.0.0.1:15173
+
+
+      # ---------------------------------------------------
+      # Isolated staging host ports
+      #
+      # These intentionally differ from the normal local
+      # development ports 5173 / 8008.
+      # ---------------------------------------------------
+
+      FRONTEND_PORT: "15173"
+
+      KONG_PROXY_PORT: "18008"
+
+
+    steps:
+
+      # ---------------------------------------------------
+      # 1. Checkout the exact revision that passed CI
+      #
+      # Do NOT simply checkout the latest main commit.
+      #
+      # workflow_run.head_sha guarantees that the source
+      # revision deployed here is the revision validated
+      # by the triggering CI workflow.
+      # ---------------------------------------------------
+
+      - name: Checkout CI-approved revision
+
+        uses: actions/checkout@v7
+
+        with:
+
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+
+      # ---------------------------------------------------
+      # 2. Delivery evidence
+      # ---------------------------------------------------
+
+      - name: Display delivery revision
+
+        shell: bash
+
+        run: |
+
+          echo "CI workflow:"
+          echo "${{ github.event.workflow_run.name }}"
+
+          echo
+
+          echo "CI conclusion:"
+          echo "${{ github.event.workflow_run.conclusion }}"
+
+          echo
+
+          echo "Source branch:"
+          echo "${{ github.event.workflow_run.head_branch }}"
+
+          echo
+
+          echo "CI-approved commit:"
+          echo "${{ github.event.workflow_run.head_sha }}"
+
+          echo
+
+          echo "Checked-out commit:"
+          git rev-parse HEAD
+
+          test \
+            "$(git rev-parse HEAD)" \
+            = \
+            "${{ github.event.workflow_run.head_sha }}"
+
+          echo
+          echo "Delivery revision verified."
+
+
+      # ---------------------------------------------------
+      # 3. Docker runtime
+      # ---------------------------------------------------
+
+      - name: Display Docker runtime
+
+        shell: bash
+
+        run: |
+
+          docker --version
+
+          docker compose version
+
+
+      # ---------------------------------------------------
+      # 4. Shell validation
+      # ---------------------------------------------------
+
+      - name: Validate staging delivery script
+
+        shell: bash
+
+        run: |
+
+          bash -n scripts/cd/deploy_staging.sh
+
+          echo "Staging delivery script syntax valid."
+
+
+      # ---------------------------------------------------
+      # 5. Run staging delivery
+      #
+      # The script:
+      #
+      # - validates Docker Compose
+      # - creates an isolated staging stack
+      # - waits for readiness
+      # - performs post-deployment smoke tests
+      # - verifies Kong
+      # - verifies Stable / Canary availability
+      # - prints diagnostics on failure
+      # - destroys the temporary environment
+      #
+      # No persistent production environment is modified.
+      # ---------------------------------------------------
+
+      - name: Run staging delivery validation
+
+        shell: bash
+
+        run: |
+
+          ./scripts/cd/deploy_staging.sh
+
+
+      # ---------------------------------------------------
+      # 6. Final evidence
+      # ---------------------------------------------------
+
+      - name: Confirm delivery verification
+
+        shell: bash
+
+        run: |
+
+          echo "=============================================="
+          echo "Staging delivery validated."
+          echo "Post-deployment smoke tests passed."
+          echo "=============================================="
