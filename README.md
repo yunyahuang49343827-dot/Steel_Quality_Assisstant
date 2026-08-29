@@ -1,8 +1,8 @@
 # Steel Quality Intelligence
 
-製造業鋼材品質分析與 AI 決策支援系統，整合 **PostgreSQL、XGBoost、SHAP、FastAPI、React、Local Qwen、Harness Engineering、Kong Gateway、Docker 與 GitHub Actions**，建立從資料分析、模型預測、可解釋性、AI Copilot 到 Gateway 與 Canary Deployment 的完整工程流程。
+製造業鋼材品質分析與 AI 決策支援系統，整合 **PostgreSQL、XGBoost、SHAP、FastAPI、React、Local Qwen、Harness Engineering、Kong Gateway、Docker 與 GitHub Actions**，建立從資料分析、模型預測、可解釋性、AI Copilot 到 Gateway、Canary Runtime、CI 與 CI-gated Staging Delivery 的完整工程流程。
 
-本專案重點不只在模型預測，而是將 **Data、ML、LLM、AI Governance、Backend、Frontend、Deployment 與 Automated Testing** 串成一套可操作、可驗證、可追蹤的 AI Application PoC。
+本專案重點不只在模型預測，而是將 **Data、ML、LLM、AI Governance、Backend、Frontend、Deployment、CI/CD 與 Automated Testing** 串成一套可操作、可驗證、可追蹤的 AI Application PoC。
 
 ---
 
@@ -33,6 +33,7 @@ Dashboard 提供：
 - 使用 **LoRA / QLoRA** 建立行為微調實驗，並透過 Locked Evaluation 與 Promotion Gate 決定是否推廣
 - 使用 **Kong Gateway** 實作 Rate Limiting 與 Stable / Canary 90% / 10% Weighted Routing
 - 使用 **Docker Compose + GitHub Actions** 建立 Backend、Frontend、PostgreSQL、Docker 與 Gateway Quality Gates
+- 使用 **GitHub Actions Continuous Delivery**，在 CI 全部通過後自動驗證同一 commit 的 Ephemeral Staging Deployment
 - AI 回答不直接取代 SQL、Model 或 Engineer Decision，而是以 deterministic evidence 為基礎提供 Decision Support
 
 ---
@@ -76,9 +77,11 @@ PostgreSQL / Model Artifacts / Host Ollama
 完整系統由以下幾個主要部分組成：
 
 ### Frontend
+
 使用 **React + TypeScript + Vite** 建立使用者介面，並由 **Nginx** 提供 Production Build 與 Reverse Proxy。
 
 ### API Gateway
+
 使用 **Kong OSS 3.9.3**，採 **DB-less Mode**，處理：
 
 - API Routing
@@ -87,6 +90,7 @@ PostgreSQL / Model Artifacts / Host Ollama
 - Gateway Request Metadata
 
 ### Backend
+
 使用 **FastAPI** 提供統一 Application Layer，包括：
 
 - Quality Analytics API
@@ -563,6 +567,8 @@ feature_count    = 27
 
 # Deployment & Gateway
 
+![Deployment & CI/CD Architecture](docs/images/deployment_cicd_architecture.png)
+
 Docker Compose 管理：
 
 ```text
@@ -610,6 +616,8 @@ Stable     90
 Canary     10
 Unknown     0
 ```
+
+> 90% / 10% 為 Weighted Routing 設計；少量 Smoke Test 的責任是確認 Stable 與 Canary 都能提供服務，不要求每次少量請求都精確呈現 90 / 10。
 
 ---
 
@@ -677,6 +685,109 @@ Vite Production Build
 
 ---
 
+# Continuous Delivery
+
+本專案使用獨立的 GitHub Actions `Continuous Delivery` workflow。
+
+CD 只在下列條件成立時執行：
+
+```text
+CI workflow completed
+CI Conclusion = success
+Source Branch = main
+```
+
+流程：
+
+```text
+Push to main
+      ↓
+Continuous Integration
+      ↓
+Final Quality Gate PASS
+      ↓
+Continuous Delivery
+      ↓
+Checkout CI-approved Commit
+      ↓
+Revision Consistency Check
+      ↓
+Ephemeral Containerized Staging Environment
+      ↓
+Post-deployment Smoke Tests
+      ↓
+Staging Delivery Verification PASSED
+      ↓
+Automatic Cleanup
+```
+
+CD 使用：
+
+```text
+github.event.workflow_run.head_sha
+```
+
+checkout 觸發 CI 的同一個 commit，避免「CI 驗證版本」與「CD 交付版本」不一致。
+
+Staging Environment 位於 **GitHub-hosted Runner**，屬於暫時性的 containerized validation environment，而不是 Persistent Production Deployment。
+
+Post-deployment Smoke Tests 驗證：
+
+```text
+Kong → FastAPI /api/health
+Frontend → Nginx → Kong → FastAPI
+Deployment Metadata
+Kong Proxy Evidence
+Stable Backend Availability
+Canary Backend Availability
+```
+
+成功條件：
+
+```text
+Health = HTTP 200
+Environment = staging
+Kong Via Header = verified
+Stable > 0
+Canary > 0
+Unknown = 0
+```
+
+失敗時：
+
+```text
+Delivery Validation FAILED
+      ↓
+Collect Diagnostics
+      ↓
+Automatic Cleanup
+      ↓
+Delivery Stopped
+```
+
+Diagnostics 包括：
+
+```text
+Container Status
+Kong Logs
+Stable Backend Logs
+Canary Backend Logs
+Frontend Logs
+PostgreSQL Logs
+```
+
+無論成功或失敗，最後都會執行：
+
+```bash
+docker compose down   --volumes   --remove-orphans
+```
+
+因此目前 CD 的正確定位是：
+
+> **CI-gated ephemeral staging delivery validation，不是 persistent production deployment。**
+
+---
+
 # Automated Testing
 
 CI-safe tests：
@@ -719,6 +830,8 @@ Safe Fallback
 Runtime Trace
 Kong Rate Limiting
 Internal-only Kong Admin API
+CI Quality Gates
+CI-approved Revision Validation
 ```
 
 治理原則：
@@ -737,6 +850,7 @@ Engineer  = final decision
 SHAP ≠ Causality
 Model Confidence ≠ Manufacturing Risk
 LLM Response ≠ Deterministic Ground Truth
+Staging ≠ Production
 ```
 
 ---
@@ -759,7 +873,7 @@ LLM Response ≠ Deterministic Ground Truth
 | Testing | Pytest |
 | Static Analysis | Ruff、oxlint |
 | Container | Docker、Docker Compose |
-| CI | GitHub Actions |
+| CI/CD | GitHub Actions |
 
 ---
 
@@ -768,6 +882,10 @@ LLM Response ≠ Deterministic Ground Truth
 ```text
 Steel_Quality_Assisstant/
 │
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── cd.yml
 ├── src/
 ├── frontend/
 ├── data/
@@ -777,8 +895,17 @@ Steel_Quality_Assisstant/
 ├── infra/
 ├── docker/
 ├── scripts/
+│   ├── ci/
+│   └── cd/
+│       └── deploy_staging.sh
 ├── docs/
 │   └── images/
+│       ├── dashboard.png
+│       ├── system_architecture.png
+│       ├── ml_explainability_workflow.png
+│       ├── harness_decision_workflow.png
+│       ├── lora_governance.png
+│       └── deployment_cicd_architecture.png
 ├── Dockerfile
 ├── docker-compose.yml
 ├── docker-compose.gateway.yml
@@ -849,7 +976,7 @@ pytest -m "not ollama and not integration and not docker"
 ## 8. Gateway Integration Tests
 
 ```bash
-pytest tests/integration/test_gateway.py -m "integration and docker" -v
+pytest tests/integration/test_gateway.py   -m "integration and docker"   -v
 ```
 
 ---
@@ -860,13 +987,13 @@ pytest tests/integration/test_gateway.py -m "integration and docker" -v
 
 目前仍有以下 production gaps：
 
-- Continuous Delivery workflow 尚未完成
 - Kong Rate Limiting 目前使用 `policy: local`
 - Production 仍需 Trusted Proxy / Real Client IP 設定
 - 尚未整合 Prometheus、Grafana、Distributed Tracing
 - Secrets 目前以 environment variables / `.env` 管理
 - Ollama 目前運行於 Host Runtime
 - Canary 尚未建立 automated metric-based promotion / rollback
+- Continuous Delivery 目前是 GitHub-hosted Runner 上的 Ephemeral Staging Validation，並非 Persistent Production Deployment
 
 ---
 
@@ -889,6 +1016,8 @@ Raw Data
 → Kong Gateway
 → Canary Runtime
 → CI Quality Gates
+→ CI-gated Staging Delivery
+→ Post-deployment Validation
 ```
 
 核心設計原則：
@@ -899,4 +1028,8 @@ Raw Data
 
 > Fine-tuning 並不代表模型一定更好；即使 validation loss 降低，只要 behavioral 或 security evidence 不符合 Promotion Criteria，就不應推廣到 application runtime。
 
-**不只建立 AI 功能，也建立一套能控制、驗證、測試與治理 AI 功能的工程架構。**
+在 Deployment Governance 方面：
+
+> 只有通過 CI Quality Gate 的相同 commit revision，才能進入 Staging Delivery Validation；若 Smoke Test 失敗，Delivery 立即停止並自動清理暫時環境。
+
+**不只建立 AI 功能，也建立一套能控制、驗證、測試、治理與交付 AI 功能的工程架構。**
